@@ -5,8 +5,8 @@ package com.example.srihari.pinkbunny;
  */
 
 public class ObjectiveNames {
-    String[] obejctiveName={"Be happy!"};
-    public String AllNames(int listNum){
+    static String[] obejctiveName={"Be happy!"};
+    public static String AllNames(int listNum){
         return obejctiveName[listNum];
     }
 }
