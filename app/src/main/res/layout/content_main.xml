@@ -24,5 +24,23 @@
         android:textColor="@color/TextColor"
         android:id="@+id/dayName"
 />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/TextColor"
+        android:id="@+id/ObjectiveName"
+        />
 
+<Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="done?"
+    android:layout_gravity="center"
+
+    android:id="@+id/DoneButton"
+    android:background="@color/colorPrimary"
+    android:textColor="@color/TextColor"
+    />
 </FrameLayout>

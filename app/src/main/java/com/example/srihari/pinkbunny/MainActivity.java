@@ -1,31 +1,25 @@
 package com.example.srihari.pinkbunny;
-import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
-
 import java.io.BufferedReader;
-import java.io.File;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.Scanner;
-
-import static android.R.attr.data;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mHeading;
     private TextView mDayName;
+    private TextView mObjective;
     private String DayNumber;
     private String DayObjective;
+    SharedPreferences prefs = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -37,48 +31,69 @@ public class MainActivity extends AppCompatActivity {
 
             //find the view
             mHeading = (TextView) findViewById(R.id.Heading);
+            mObjective = (TextView) findViewById(R.id.ObjectiveName);
+            mObjective.setTypeface(tDayName);
             //get the Font
-
             mHeading.setTypeface(tHeading);
+
             //set text for the heading
             mHeading.setText("\n\nWelcome to Pink Bunny");
-
             //find the day name
             mDayName = (TextView) findViewById(R.id.dayName);
+
             mDayName.setTypeface(tDayName);
-            //make file in which day number is stored
-        FirstTimeNumberAdd();
+
+        prefs = getSharedPreferences("com.example.srihari.pinkbunny", MODE_PRIVATE);
         DayNumber=ReadSet().toString();
-        mDayName.setText("\n\n\n\nDay:"+DayNumber);
+        mDayName.setText("\n\n\n\nDay:"+DayNumber+":\n\n\n");
+        mObjective.setText("clicked");
 
+        //button
+        final Button button = (Button) findViewById(R.id.DoneButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                appendDayNumber();
+                mDayName.setText("\n\n\n\nDay"+DayNumber+":\n\n\n");
+            mObjective.setText("clicked");
 
-        }
-        String FILENAME="numberfile";
-
-        public void FirstTimeNumberAdd(){
-            try {
-
-                FileOutputStream fos=openFileOutput(FILENAME,MODE_WORLD_READABLE);
-                if (Integer.parseInt(DayNumber) != 1) {
-                    fos.write("1".getBytes());
-                    fos.close();
-                }
-                else{
-                    fos.write((DayNumber+1).toString().getBytes());
-                    fos.close();
-                }
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
 
-        }
-        public StringBuilder ReadSet(){
-            StringBuilder sb = new StringBuilder();
+        });
 
-            try {
+
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (prefs.getBoolean("firstrun", true)) {
+            FirstTimeNumberAdd();
+            prefs.edit().putBoolean("firstrun", false).commit();
+        }
+    }
+
+//All DayNumber management stuff starts here
+    String FILENAME="numberfile";
+    private void FirstTimeNumberAdd(){
+        try {
+            FileOutputStream fos=openFileOutput(FILENAME,MODE_WORLD_READABLE);
+            fos.write("1".getBytes());
+            fos.close();
+
+         }
+         catch (FileNotFoundException e) {
+                e.printStackTrace();
+         } catch (IOException e) {
+               e.printStackTrace();
+         }
+            }
+
+    private StringBuilder ReadSet(){
+    StringBuilder sb = new StringBuilder();
+    try {
                 FileInputStream fin = openFileInput(FILENAME);
                 InputStreamReader inputStreamReader = new InputStreamReader(fin);
                 String line;
@@ -86,13 +101,35 @@ public class MainActivity extends AppCompatActivity {
                 while ((line = bufferedReader.readLine()) != null) {
                     sb.append(line);
                 }
+    } catch (FileNotFoundException e) {
+                e.printStackTrace();
+    } catch (IOException e) {
+                e.printStackTrace();
+    }
+        return sb;
+    }
 
+    private void appendDayNumber(){
+            Integer extended_date= Integer.parseInt(ReadSet().toString())+1;
+            String daynum= extended_date.toString();
+            if (Integer.parseInt(daynum)>=30) {
+                daynum="1";
+            }
+            else{
+                DayNumber=daynum;
+            }
+            try {
+
+                FileOutputStream fos=openFileOutput(FILENAME,MODE_WORLD_READABLE);
+                fos.write(daynum.getBytes());
+                fos.close();
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return sb;
+
+
         }
     }
