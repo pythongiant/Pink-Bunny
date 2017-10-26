@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
             //get the Font
             mHeading.setTypeface(tHeading);
 
-            //set text for the heading
-            mHeading.setText("\n\nWelcome to Pink Bunny");
+            //set text for the heading\n\n\n\n\n\n
+            mHeading.setText("\n\nWelcome to Pink Bunny\n\n");
             //find the day name
             mDayName = (TextView) findViewById(R.id.dayName);
 
@@ -45,26 +45,20 @@ public class MainActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences("com.example.srihari.pinkbunny", MODE_PRIVATE);
         DayNumber=ReadSet().toString();
-        mDayName.setText("\n\n\n\nDay:"+DayNumber+":\n\n\n");
-        mObjective.setText("clicked");
+        mDayName.setText("Day "+DayNumber+":");
+        mObjective.setText(ObjectiveNames.AllNames(Integer.parseInt(DayNumber))+"\n\n");
 
         //button
         final Button button = (Button) findViewById(R.id.DoneButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 appendDayNumber();
-                mDayName.setText("\n\n\n\nDay"+DayNumber+":\n\n\n");
-            mObjective.setText("clicked");
-
+                mDayName.setText("Day "+DayNumber+":");
+                mObjective.setText(ObjectiveNames.AllNames(Integer.parseInt(DayNumber)));
             }
 
         });
-
-
-
     }
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -80,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private void FirstTimeNumberAdd(){
         try {
             FileOutputStream fos=openFileOutput(FILENAME,MODE_WORLD_READABLE);
-            fos.write("1".getBytes());
+            fos.write("0".getBytes());
             fos.close();
 
          }
@@ -113,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             Integer extended_date= Integer.parseInt(ReadSet().toString())+1;
             String daynum= extended_date.toString();
             if (Integer.parseInt(daynum)>=30) {
-                daynum="1";
+                daynum="0";
             }
             else{
                 DayNumber=daynum;
