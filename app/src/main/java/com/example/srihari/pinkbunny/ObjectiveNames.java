@@ -35,7 +35,7 @@ public class ObjectiveNames {
             "Go for Vacation outside the city",
             "Go to a nearby library and read a new book ",
             "Play your favourite sport for atleast an hour",
-            "Congratulations. You reached the end! Post on your favourite social networking website a screenshot of this screen. with #FurryBunnyChallenge"
+            ""
 
 
     };

@@ -3,6 +3,8 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import java.io.BufferedReader;
+
+import android.support.annotation.IntegerRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mHeading;
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             mHeading.setTypeface(tHeading);
 
             //set text for the heading\n\n\n\n\n\n
-            mHeading.setText("\n\nWelcome to Pink Bunny\n\n");
+            mHeading.setText("\nWelcome to Pink Bunny\n");
             //find the day name
             mDayName = (TextView) findViewById(R.id.dayName);
 
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences("com.example.srihari.pinkbunny", MODE_PRIVATE);
         DayNumber=ReadSet().toString();
-        mDayName.setText("Day "+DayNumber+":");
+        mDayName.setText("Task "+DayNumber+":");
         mObjective.setText(ObjectiveNames.AllNames(Integer.parseInt(DayNumber))+"\n\n");
 
         //button
@@ -53,11 +56,34 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 appendDayNumber();
-                mDayName.setText("Day "+DayNumber+":");
-                mObjective.setText(ObjectiveNames.AllNames(Integer.parseInt(DayNumber)));
+                mDayName.setText("Task "+DayNumber+":");
+                mObjective.setText(ObjectiveNames.AllNames(Integer.parseInt(DayNumber))+"\n\n");
             }
 
         });
+        final Button BackButton = (Button) findViewById(R.id.BackButton);
+        BackButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Integer DayNum = Integer.parseInt(DayNumber)-1;
+                String sDaynum = DayNum.toString();
+                mDayName.setText("Task "+sDaynum +":");
+                mObjective.setText(ObjectiveNames.AllNames(Integer.parseInt(sDaynum))+"\n\n");
+            }
+
+        });
+
+    final Button bRandomButton  = (Button) findViewById(R.id.RandomButton);
+       bRandomButton.setOnClickListener(new View.OnClickListener() {
+        public void onClick(View v) {
+            Random rand = new Random();
+            Integer DayNum = rand.nextInt(30)+1;
+            String sDaynum = DayNum.toString();
+            mDayName.setText("Task "+sDaynum +":");
+            mObjective.setText(ObjectiveNames.AllNames(Integer.parseInt(sDaynum))+"\n\n");
+        }
+
+
+    });
     }
     @Override
     protected void onResume() {
